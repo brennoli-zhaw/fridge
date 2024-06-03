@@ -1,0 +1,560 @@
+[
+    {
+        "id": "ca48747229949dc1",
+        "type": "tab",
+        "label": "orchestrate",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "df43ca53db873ae4",
+        "type": "rpi-sensehat in",
+        "z": "ca48747229949dc1",
+        "name": "Sense Hat",
+        "motion": false,
+        "env": true,
+        "stick": false,
+        "x": 100,
+        "y": 200,
+        "wires": [
+            [
+                "670e0c7ae559e1c8"
+            ]
+        ]
+    },
+    {
+        "id": "670e0c7ae559e1c8",
+        "type": "function",
+        "z": "ca48747229949dc1",
+        "name": "function 2",
+        "func": "var time = new Date().getTime();\nmsg.payload.timestamp = parseFloat(time) + 0.001;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 200,
+        "wires": [
+            [
+                "e8104f8d826ef14a"
+            ]
+        ]
+    },
+    {
+        "id": "e8104f8d826ef14a",
+        "type": "trigger",
+        "z": "ca48747229949dc1",
+        "name": "",
+        "op1": "",
+        "op2": "",
+        "op1type": "pay",
+        "op2type": "nul",
+        "duration": "1",
+        "extend": false,
+        "overrideDelay": false,
+        "units": "s",
+        "reset": "",
+        "bytopic": "all",
+        "topic": "topic",
+        "outputs": 1,
+        "x": 460,
+        "y": 260,
+        "wires": [
+            [
+                "eecc5a2b9df8c3ba",
+                "9bcb7eaf06d2ec4c",
+                "45f9ff239f239d2c",
+                "36ec80634f5e83e8"
+            ]
+        ]
+    },
+    {
+        "id": "92f8eeb99e4c9db9",
+        "type": "exec",
+        "z": "ca48747229949dc1",
+        "command": "python /home/IoTgruppe2/Desktop/scripts/project/save_data_to_db.py",
+        "addpay": "payload",
+        "append": "",
+        "useSpawn": "true",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "save data to db",
+        "x": 860,
+        "y": 180,
+        "wires": [
+            [],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "eecc5a2b9df8c3ba",
+        "type": "json",
+        "z": "ca48747229949dc1",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 610,
+        "y": 200,
+        "wires": [
+            [
+                "87567e546a2ebcef",
+                "92f8eeb99e4c9db9"
+            ]
+        ]
+    },
+    {
+        "id": "c80d3889a7f24d86",
+        "type": "debug",
+        "z": "ca48747229949dc1",
+        "name": "debug 4",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 840,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "014f5798a7b64bae",
+        "type": "ui_gauge",
+        "z": "ca48747229949dc1",
+        "name": "",
+        "group": "cb9b7077f6794edc",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Temperature",
+        "label": "deg",
+        "format": "{{value}}",
+        "min": "-30",
+        "max": "50",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "def",
+        "seg2": "deg",
+        "diff": false,
+        "className": "",
+        "x": 850,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "9bcb7eaf06d2ec4c",
+        "type": "function",
+        "z": "ca48747229949dc1",
+        "name": "Temperature",
+        "func": "var temp = msg.payload.temperature;\n\nmsg.payload = temp\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 650,
+        "y": 520,
+        "wires": [
+            [
+                "014f5798a7b64bae"
+            ]
+        ]
+    },
+    {
+        "id": "36ec80634f5e83e8",
+        "type": "function",
+        "z": "ca48747229949dc1",
+        "name": "Pressure",
+        "func": "msg.payload = msg.payload.pressure;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 640,
+        "y": 640,
+        "wires": [
+            [
+                "c6382450709f8738"
+            ]
+        ]
+    },
+    {
+        "id": "45f9ff239f239d2c",
+        "type": "function",
+        "z": "ca48747229949dc1",
+        "name": "Humidity",
+        "func": "\nmsg.payload = msg.payload.humidity;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 640,
+        "y": 580,
+        "wires": [
+            [
+                "e046a0a2c01de31e"
+            ]
+        ]
+    },
+    {
+        "id": "e046a0a2c01de31e",
+        "type": "ui_gauge",
+        "z": "ca48747229949dc1",
+        "name": "",
+        "group": "cb9b7077f6794edc",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Humidity",
+        "label": "%",
+        "format": "{{value}}",
+        "min": "0",
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "def",
+        "seg2": "deg",
+        "diff": false,
+        "className": "",
+        "x": 840,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "c6382450709f8738",
+        "type": "ui_gauge",
+        "z": "ca48747229949dc1",
+        "name": "",
+        "group": "cb9b7077f6794edc",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Pressure",
+        "label": "pa",
+        "format": "{{value}}",
+        "min": "600",
+        "max": "1200",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "def",
+        "seg2": "deg",
+        "diff": false,
+        "className": "",
+        "x": 840,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "87567e546a2ebcef",
+        "type": "mqtt out",
+        "z": "ca48747229949dc1",
+        "name": "PUBLISHER Sensors",
+        "topic": "sensors",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "b47eb7088a39101d",
+        "x": 800,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "2d5ed18bb9fbb084",
+        "type": "mqtt in",
+        "z": "ca48747229949dc1",
+        "name": "SUBSCRIBER Sensors",
+        "topic": "sensors",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "b47eb7088a39101d",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 660,
+        "y": 100,
+        "wires": [
+            [
+                "c80d3889a7f24d86"
+            ]
+        ]
+    },
+    {
+        "id": "65a049c723d6f705",
+        "type": "inject",
+        "z": "ca48747229949dc1",
+        "name": "Activate WebCam",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "payload",
+        "payloadType": "msg",
+        "x": 130,
+        "y": 380,
+        "wires": [
+            [
+                "25d86e78ea4f447a"
+            ]
+        ]
+    },
+    {
+        "id": "25d86e78ea4f447a",
+        "type": "exec",
+        "z": "ca48747229949dc1",
+        "command": "python /home/IoTgruppe2/Desktop/scripts/project/setup_mqtt_webcam.py",
+        "addpay": "payload",
+        "append": "",
+        "useSpawn": "true",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "activate_mqtt_webcam",
+        "x": 180,
+        "y": 540,
+        "wires": [
+            [],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "fadf0ba506f1cd56",
+        "type": "mqtt in",
+        "z": "ca48747229949dc1",
+        "name": "SUBSCRIBER Webcam",
+        "topic": "webcam",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "b47eb7088a39101d",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 660,
+        "y": 40,
+        "wires": [
+            [
+                "fec30c7ff95fd232"
+            ]
+        ]
+    },
+    {
+        "id": "fec30c7ff95fd232",
+        "type": "debug",
+        "z": "ca48747229949dc1",
+        "name": "debug 5",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 840,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "e440505884a2bf7b",
+        "type": "exec",
+        "z": "ca48747229949dc1",
+        "command": "python /home/IoTgruppe2/Desktop/scripts/project/led.py",
+        "addpay": "payload",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "",
+        "x": 970,
+        "y": 760,
+        "wires": [
+            [
+                "6b856e86008b5c50"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "077a14bac04bf4f9",
+        "type": "socketio-listener",
+        "z": "ca48747229949dc1",
+        "eventname": "socket_led",
+        "name": "",
+        "x": 670,
+        "y": 1000,
+        "wires": [
+            [
+                "97465e1d6dfdaa4d"
+            ]
+        ]
+    },
+    {
+        "id": "e3a78f2a264fe2ac",
+        "type": "socketio-connector",
+        "z": "ca48747229949dc1",
+        "server": "d73e25335c152ef5",
+        "namespace": "",
+        "transport": "",
+        "name": "Interactions",
+        "x": 370,
+        "y": 980,
+        "wires": [
+            [
+                "077a14bac04bf4f9"
+            ]
+        ]
+    },
+    {
+        "id": "6b856e86008b5c50",
+        "type": "debug",
+        "z": "ca48747229949dc1",
+        "name": "debug 7",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1260,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "97465e1d6dfdaa4d",
+        "type": "json",
+        "z": "ca48747229949dc1",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 510,
+        "y": 760,
+        "wires": [
+            [
+                "9af1ed9b6f9f6e10"
+            ]
+        ]
+    },
+    {
+        "id": "9af1ed9b6f9f6e10",
+        "type": "json",
+        "z": "ca48747229949dc1",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 650,
+        "y": 740,
+        "wires": [
+            [
+                "e440505884a2bf7b"
+            ]
+        ]
+    },
+    {
+        "id": "739816e11ce2864a",
+        "type": "global-config",
+        "z": "ca48747229949dc1",
+        "name": "global-config",
+        "env": [
+            {
+                "name": "activate_webcam",
+                "value": "false",
+                "type": "bool"
+            }
+        ]
+    },
+    {
+        "id": "cb9b7077f6794edc",
+        "type": "ui_group",
+        "name": "Group 1",
+        "tab": "127bb9b98ce2a2d1",
+        "order": 1,
+        "disp": true,
+        "width": 6
+    },
+    {
+        "id": "b47eb7088a39101d",
+        "type": "mqtt-broker",
+        "name": "MQTT-1",
+        "broker": "192.168.1.243",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "d73e25335c152ef5",
+        "type": "socketio-config",
+        "host": "http://192.168.1.87",
+        "port": "5000",
+        "path": "",
+        "reconnection": true
+    },
+    {
+        "id": "127bb9b98ce2a2d1",
+        "type": "ui_tab",
+        "name": "Tab 1",
+        "icon": "dashboard",
+        "order": 1
+    }
+]
