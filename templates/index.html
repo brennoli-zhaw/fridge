@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Cache-control" content="no-cache" charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js"
+        integrity="sha512-aMGMvNYu8Ue4G+fHa359jcPb1u+ytAF+P2SCb+PxrjCdO3n3ZTxJ30zuH39rimUggmTwmh2u7wvQsDTHESnmfQ=="
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js" integrity="sha512-ZwR1/gSZM3ai6vCdI+LVF1zSq/5HznD3ZSTk7kajkaj4D292NLuduDCO1c/NT8Id+jE58KYLKT7hXnbtryGmMg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
+    <script type="text/javascript" src="globals.js"></script>
+    <script type="text/javascript" src="socket.js"></script>
+    <script type="text/javascript" src="script.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="responsive.css">
+</head>
+
+<body>
+    <div class="topbar">
+        <div class="container">
+            <div class="inner">
+                <div id="header">
+                    <h3>Websocket: <span class="socket-status"></span></h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="webcam-wrapper">
+        <img id="webcam" src="" alt="webcam" />
+    </div>
+    <div class="donuts-wrapper">
+        <div id="donuts" class="container">
+
+        </div>
+    </div>
+    
+    <div class="tabs">
+        <div class="container">
+            <h2>Historic Sensor Data</h2>
+        </div>
+        <div class="container tab-wrapper">
+            <!-- <div class="tab active" data-tab="date">
+                <span>Date</span>
+            </div>
+            <div class="tab" data-tab="month">
+                <span>Month</span>
+            </div>
+            <div class="tab" data-tab="year">
+                <span>2024</span>
+            </div> -->
+            <div class="tab active" data-tab="sensorData">
+                <span>DateRange</span>
+            </div>
+            <div class="tab" data-tab="persons">
+                <span>Persons</span>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+            <!-- <div class="control-wrapper" data-control-wrapper="month">
+                <div class="controler" data-endpoint="getMonthData">
+                    <h3>Filter by Month</h3>
+                    <form>
+                        <select data-form="year" name="year">
+                            <option selected value="2024">2024</option>
+                        </select>
+                        <select data-form="month" name="month">
+                            <option value="1">January</option>
+                            <option value="2">February</option>
+                            <option value="3">March</option>
+                            <option value="4">April</option>
+                            <option selected value="5">May</option>
+                            <option value="6">June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                        <div class="sensor-ranges">
+                            <div>
+                                <div class="title">Temperature</div>
+                                <input type="number" name="start_temperature" min="-30" max="50" steps="0.1" value="-30"> <span>°C</span>
+                                <span> to </span>
+                                <input type="number" name="end_temperature" min="-30" max="50" steps="0.1" value="50"> <span>°C</span>       
+                            </div>
+                            <div>
+                                <div class="title">Pressure</div>
+                                <input type="number" name="start_pressure" min="800" max="1100" steps="0.1" value="800"> <span>hPa</span>
+                                <span> to </span>
+                                <input type="number" name="end_pressure" min="800" max="1100" steps="0.1" value="1100"> <span>hPa</span>
+                            </div>
+                            <div>
+                                <div class="title">Humidity</div>
+                                <input type="number" name="start_humidity" min="0" max="100" steps="0.1" value="0"> <span>%</span>
+                                <span> to </span>
+                                <input type="number" name="end_humidity" min="0" max="100" steps="0.1" value="100"> <span>%</span>
+                            </div>
+                        </div>
+                        <div class="button">
+                            <button type="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+                <canvas id="getMonthData"></canvas>
+                <button style="display:none;" data-canvas="getMonthData">reset zoom</button>
+            </div> -->
+            <!-- <div class="control-wrapper" data-control-wrapper="year">
+                <div class="controler" data-endpoint="getYearData">
+                    <h3>Filter by Year</h3>
+                    <form>
+                        <select data-form="year" name="year">
+                            <option value="2024">2024</option>
+                        </select>
+                        <div class="sensor-ranges">
+                            <div>
+                                <div class="title">Temperature</div>
+                                <input type="number" name="start_temperature" min="-30" max="50" steps="0.1" value="-30"> <span>°C</span>
+                                <span> to </span>
+                                <input type="number" name="end_temperature" min="-30" max="50" steps="0.1" value="50"> <span>°C</span>       
+                            </div>
+                            <div>
+                                <div class="title">Pressure</div>
+                                <input type="number" name="start_pressure" min="800" max="1100" steps="0.1" value="800"> <span>hPa</span>
+                                <span> to </span>
+                                <input type="number" name="end_pressure" min="800" max="1100" steps="0.1" value="1100"> <span>hPa</span>
+                            </div>
+                            <div>
+                                <div class="title">Humidity</div>
+                                <input type="number" name="start_humidity" min="0" max="100" steps="0.1" value="0"> <span>%</span>
+                                <span> to </span>
+                                <input type="number" name="end_humidity" min="0" max="100" steps="0.1" value="100"> <span>%</span>
+                            </div>
+                        </div>
+                        <div class="button">
+                            <button type="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+                <canvas id="getYearData"></canvas>
+                <button style="display:none;" data-canvas="getYearData">reset zoom</button>
+            </div> -->
+            <!-- <div class="control-wrapper active" data-control-wrapper="date">
+                <div class="controler" data-endpoint="getDateData">
+                    <h3>Filter by Date</h3>
+                    <form>
+                        <input value="2024-05-25" type="date" data-form="date" name="date">
+                        <div class="sensor-ranges">
+                            <div>
+                                <div class="title">Temperature</div>
+                                <input type="number" name="start_temperature" min="-30" max="50" steps="0.1" value="-30"> <span>°C</span>
+                                <span> to </span>
+                                <input type="number" name="end_temperature" min="-30" max="50" steps="0.1" value="50"> <span>°C</span>       
+                            </div>
+                            <div>
+                                <div class="title">Pressure</div>
+                                <input type="number" name="start_pressure" min="800" max="1100" steps="0.1" value="800"> <span>hPa</span>
+                                <span> to </span>
+                                <input type="number" name="end_pressure" min="800" max="1100" steps="0.1" value="1100"> <span>hPa</span>
+                            </div>
+                            <div>
+                                <div class="title">Humidity</div>
+                                <input type="number" name="start_humidity" min="0" max="100" steps="0.1" value="0"> <span>%</span>
+                                <span> to </span>
+                                <input type="number" name="end_humidity" min="0" max="100" steps="0.1" value="100"> <span>%</span>
+                            </div>
+                        </div>
+                        <div class="button">
+                            <button type="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+                <canvas id="getDateData"></canvas>
+                <button style="display:none;" data-canvas="getDateData">reset zoom</button>
+            </div> -->
+            <div class="control-wrapper active" data-control-wrapper="sensorData">
+                <div class="controler" data-endpoint="getTimestampRangeData">
+                    <h3>Filter by Range</h3>
+                    <form>
+                        <div class="date-start">
+                            <div>Date start</div>
+                            <input value="2024-05-01" type="date" data-form="date-start" name="start">
+                            <input value="18:00" type="time"  data-form="time-start" name="time-start">
+                        </div>
+                        <div class="date-end">
+                            <div>Date end</div>
+                            <input value="2024-05-26" type="date" data-form="date-end"  name="end">
+                            <input value="18:00" type="time"  data-form="time-start" name="time-end">
+                        </div>
+                        <div class="sensor-ranges">
+                            <div>
+                                <div class="title">Temperature</div>
+                                <input type="number" name="start_temperature" min="-30" max="50" steps="0.1" value="-30"> <span>°C</span>
+                                <span> to </span>
+                                <input type="number" name="end_temperature" min="-30" max="50" steps="0.1" value="50"> <span>°C</span>       
+                            </div>
+                            <div>
+                                <div class="title">Pressure</div>
+                                <input type="number" name="start_pressure" min="800" max="1100" steps="0.1" value="800"> <span>hPa</span>
+                                <span> to </span>
+                                <input type="number" name="end_pressure" min="800" max="1100" steps="0.1" value="1100"> <span>hPa</span>
+                            </div>
+                            <div>
+                                <div class="title">Humidity</div>
+                                <input type="number" name="start_humidity" min="0" max="100" steps="0.1" value="0"> <span>%</span>
+                                <span> to </span>
+                                <input type="number" name="end_humidity" min="0" max="100" steps="0.1" value="100"> <span>%</span>
+                            </div>
+                        </div>
+                        <div class="button">
+                            <button type="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+                <canvas id="getTimestampRangeData"></canvas>
+                <button style="display:none;" data-canvas="getTimestampRangeData">reset zoom</button>
+            </div>
+            <div class="control-wrapper" data-control-wrapper="persons">
+                <div class="controler" data-endpoint="getTimestampRangeInteractions">
+                    <h3>Filter by Range</h3>
+                    <form>
+                        <div class="date-start">
+                            <div>Date start</div>
+                            <input value="2024-05-01" type="date" data-form="date-start" name="start">
+                            <input value="18:00" type="time"  data-form="time-start" name="time-start">
+                        </div>
+                        <div class="date-end">
+                            <div>Date end</div>
+                            <input value="2024-05-26" type="date" data-form="date-end"  name="end">
+                            <input value="18:00" type="time"  data-form="time-start" name="time-end">
+                        </div>
+                        <div class="persons">
+                            <div>Persons</div>
+                            <div class="person-checkbox">
+                                <input type="checkbox" checked id="Elias" name="Elias">
+                                <label for="Elias">Elias</label>
+                            </div>
+                            <div class="person-checkbox">
+                                <input type="checkbox" checked id="Florian" name="Florian">
+                                <label for="Florian">Florian</label>
+                            </div>
+                            <div class="person-checkbox">
+                                <input type="checkbox" checked id="Oliver" name="Oliver">
+                                <label for="Oliver">Oliver</label>
+                            </div>
+                            <div class="person-checkbox">
+                                <input type="checkbox" checked id="Mendes" name="Mendes">
+                                <label for="Mendes">Mendes</label>
+                            </div>
+                            <div class="person-checkbox">
+                                <input type="checkbox" checked id="Martin" name="Martin">
+                                <label for="Martin">Martin</label>
+                            </div>
+                            <div class="person-checkbox">
+                                <input type="checkbox" checked id="Laury" name="Laury">
+                                <label for="Laury">Laury</label>
+                            </div>
+                        </div>
+                        <div class="button">
+                            <button type="submit">Submit</button>
+                        </div>
+                    </form>
+                    <div id="interactions"></div>
+                </div>
+            </div>
+        </div>
+</body>
+
+</html>

@@ -1,0 +1,4 @@
+install guide face recognition:
+install CMake: pip install CMake
+python -m pip install dlib-19.24.99-cp312-cp312-win_amd64.whl
+pip install face_recognition

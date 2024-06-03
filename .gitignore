@@ -1,0 +1,8 @@
+/persons/Martin/*
+/persons/Mendes/*
+/persons/Laury/*
+.vscode
+.venv
+.env
+__pycache__
+.notes.txt
